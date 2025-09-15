@@ -8,7 +8,7 @@ from rest_framework.response import Response
 from rest_framework import status
 
 from .models import User
-from .serializers import UserRegisterSerializer
+from .serializers import UserRegisterSerializer, UserLoginSerializer
 
 # Create your views here.
 class UserRegisterAPIView(generics.CreateAPIView):
@@ -32,3 +32,13 @@ class EmailConfirmAPIView(APIView):
         user.save()
 
         return Response(data={"status": "Confirmed!"}, status=status.HTTP_200_OK)
+
+
+class UserLoginAPIView(generics.GenericAPIView):
+    serializer_class = UserLoginSerializer
+    permission_classes = [AllowAny]
+
+    def post(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        return Response(serializer.validated_data, status=status.HTTP_200_OK)
