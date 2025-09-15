@@ -14,6 +14,7 @@ from pathlib import Path
 from decouple import config
 
 from .jazzmin_conf import *
+from .auth import *
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -53,11 +54,21 @@ EXTERNAL_APPS = [
     'daphne',
     'rest_framework',
     'jazzmin',
+    'rest_framework_simplejwt',
+    'jwt',
 
 ]
 
 INSTALLED_APPS = EXTERNAL_APPS + LOCAL_APPS + DJANGO_APPS
 
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.AllowAny',
+    ],
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    )
+}
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
