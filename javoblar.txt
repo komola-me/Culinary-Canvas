@@ -1,0 +1,33 @@
+1. Aiogramda Finite State Machine nima va u nima uchun kerak? FSM bo’lmaganda nima bo’lar edi?
+
+FSM bu cheklangan miqdordagi holatlardir. Aiogram misolida bu muloqotning turli bosqichlarini anglatadi. Malum bir input larga javoban boshqa state larga o'tishi mumkin. Masalan, telegram bot orqali rasm yuborish so'ralayotganda -- bot rasm qabul qilish holatida bo'ladi va user rasm yuborgandan so'ng boshqa belgilangan holatga o'tadi.
+FSM bo'lmaganda, qo'lda har bir holatni if/else qilib tekshirib chiqishga to'g'ri kelardi.
+
+2. Aiogramda fayllar bilan ishlaganda ularni databasega qanday usulda saqlash kerak?
+
+File ni o'zini emas, balki ID (file_id) sini saqlash yetarli bo'ladi. Bu xotirani tejaydi va telegramdan qayta jo'natish kk bo'lganda tezroq olish qobiliyatiga ega. File ni db ga yuklab, keyin jo'natayotganda qayta yuklamaydi.
+
+3. Aiogramda dependency injection bormi? U qanday implement qilinadi va nima uchun kerak?
+
+Ha, dependency injection bor va u filter, middleware va handler larga kerakli data va object larni beradi.
+
+async def command_start_handler(message: Message, session: AsyncSession):
+    user = await get_or_create_user(session, message.from_user)
+
+    welcome_text = (
+        f"Hi, {hbold(user.first_name)}!\n"
+        f"Welcome to File Saver bot!\n"
+        f"Here you can upload and view your files!"
+    )
+    await message.answer(welcome_text, reply_markup=main_menu_keyboard())
+
+Bu yerda message va session inject qilinayapti.
+
+4. Merchant va Subscribe API o’rtasida qanday farqlar bor?
+
+Merchant umumiy payment bilan bog'liq operatsiyalar uchun kerak.
+Subscribe esa qaytalanuvchi (oyma-oy, yillik, haftalik) payment operation lari uchun ishlatiladi.
+
+5. Biz merchant service sifatida nima uchun CallbackAPI tashkil qilishimiz kerak? Undan bizga nima foyda?
+
+Foydalanuvchi kam/ko'p miqdorda payment qilganini tekshirish, transaksiya statusiga aloqador updatelar vaqtida bo'lishini taminlaydi.
