@@ -12,9 +12,11 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 
 from pathlib import Path
 from decouple import config
+from django.utils.translation import gettext_lazy as _
 
 from .jazzmin_conf import *
 from .auth import *
+from .logging import *
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -58,6 +60,10 @@ EXTERNAL_APPS = [
     'jwt',
     'drf_spectacular',
     'drf_spectacular_sidecar',
+
+    'rosetta',
+    'modeltranslation',
+    'django_filters'
 ]
 
 INSTALLED_APPS = EXTERNAL_APPS + LOCAL_APPS + DJANGO_APPS
@@ -75,6 +81,7 @@ REST_FRAMEWORK = {
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.locale.LocaleMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -171,3 +178,11 @@ MEDIA_ROOT = BASE_DIR / 'media'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 AUTH_USER_MODEL = 'users.User'
+
+LOCALE_PATHS = [BASE_DIR / 'locale']
+
+LANGUAGES = [
+    ("en", _("English")),
+    ("ru", _("Russian")),
+    ("uz", _("Uzbek")),
+]

@@ -23,12 +23,11 @@ from rest_framework_simplejwt.views import (
 from django.conf import settings
 from django.conf.urls.static import static
 from drf_spectacular.views import SpectacularAPIView, SpectacularRedocView, SpectacularSwaggerView
+from django.conf.urls.i18n import i18n_patterns
+from django.views.generic import TemplateView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-
-    path('users/', include('users.urls')),
-    path('', include('recipes.urls')),
 
     path('api-auth/', include('rest_framework.urls')),
     path('api/token/', TokenObtainPairView.as_view(), name="token_obtain_pair"),
@@ -42,3 +41,10 @@ urlpatterns = [
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+
+urlpatterns += i18n_patterns(
+    # path('', TemplateView.as_view(template_name='index.html'), name='home'),
+    # add your app urls here that should have a language prefix
+    path('users/', include('users.urls')),
+    path('', include('recipes.urls')),
+)

@@ -10,6 +10,7 @@ from rest_framework import status
 from .models import User
 from .serializers import UserRegisterSerializer, UserLoginSerializer
 
+
 # Create your views here.
 class UserRegisterAPIView(generics.CreateAPIView):
     queryset = User.objects.filter(is_active=True)
@@ -41,4 +42,5 @@ class UserLoginAPIView(generics.GenericAPIView):
     def post(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
+
         return Response(serializer.validated_data, status=status.HTTP_200_OK)

@@ -1,9 +1,12 @@
 from rest_framework import serializers
 from rest_framework_simplejwt.tokens import RefreshToken
 from django.contrib.auth import authenticate
+import logging
 
 from users.models import User
 from users.tasks import send_register_email
+
+logger = logging.getLogger(__name__)
 
 
 class UserRegisterSerializer(serializers.Serializer):
@@ -37,9 +40,11 @@ class UserLoginSerializer(serializers.Serializer):
         user = authenticate(username=email, password=password)
 
         if not user:
+            logger.warning(f"Failed login attempt with email: {email}")
             raise serializers.ValidationError("Invalid email or password.")
 
         if not user.is_confirmed:
+            logger.warning(f"Unconfirmed email login attempt: {email}")
             raise serializers.ValidationError("Please confirm your email before logging in.")
 
         refresh = RefreshToken.for_user(user)
